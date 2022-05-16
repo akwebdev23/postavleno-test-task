@@ -1,6 +1,5 @@
 <?php
 namespace App;
-use App\Controller\MainController;
 use App\Http\Request;
 use App\Http\Response;
 
@@ -8,18 +7,18 @@ class Router {
     protected $routes;
     public function __construct($routes){
         $this->routesHandle($routes);
-        var_dump($this->routes);
     }
     public function handleRequest(Request $request){
         $response = $this->getResponse($request);
         $response->send();
     }
     public function getResponse($request){
+        var_dump($request);
         if(array_key_exists($request->uri, $this->routes)){
             $className = 'App\\Controller\\'.$this->routes[$request->uri][1];
             $method = $this->routes[$request->uri][0];
-            $controller = new $className($request);
-            $response = $controller->$method();
+            $controller = new $className();
+            $response = $controller->$method($request);
         }
         else
             $response = new Response('Not found', 404);
