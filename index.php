@@ -1,7 +1,12 @@
 <?php
 require_once('./vendor/autoload.php');
+
+use App\Http\Request;
 use App\Router;
-$router = new Router();
-// var_dump(headers_sent());
-$router->handle();
+
+require_once('./src/routes.php');
+$request = new Request;
+$router = new Router($routes);
+$router->handleRequest($request);
+
 ?>

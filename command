@@ -18,6 +18,9 @@ switch ($command) {
     case 'set':
         $res = $commander->set($key, $value);
         break;
+    case 'get':
+        $res = $commander->get($key);
+        break;
     case 'delete':
         $res = $commander->delete($key);
         break;
