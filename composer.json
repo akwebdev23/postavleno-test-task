@@ -1,0 +1,26 @@
+{
+    "name": "akwebdev/postavleno",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.4",
+        "ext-redis": "^5.1",
+        "ext-memcache": "*"
+    },
+    "require-dev": {
+        "php": "^7.4",
+        "ext-redis": "^5.1",
+        "ext-memcache": "*"
+    },
+
+    "authors": [
+        {
+            "name": "ak",
+            "email": "akwebdev23@gmail.com"
+        }
+    ]
+}
