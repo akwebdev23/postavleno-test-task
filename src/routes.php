@@ -1,8 +1,9 @@
 <?php
 
 $routes = [
-    '/' => ['GET', 'MainController'],
+    '/' => ['GET', 'MainController', 'main'],
     '/api' => [
-        '/redis' => ['GET', 'MainController']
+        '/redis' => ['GET', 'MainController', 'get'],
+        '/redis/{key}' => ['DELETE', 'MainController', 'delete'],
     ]        
 ];
