@@ -1,41 +1,44 @@
 <?php
 
 namespace App\Storage;
+use App\Exception\StorageException;
 
-class Memcache{
-    protected $expire;
-    protected $storage;
-    protected $hash = 'main';
-    public function __construct($expire, $hash)
+class Memcache extends Storage{
+    public function __construct($expire)
     {
-        if($hash)
-            $this->hash = $hash;
         $this->expire = $expire;
         $this->storage = new \Memcache();
-        $this->storage->connect('localhost', 11211);
+        if(!$this->storage->connect('localhost', 11211))
+            throw new StorageException("Storage connect error", 500);
     }
-    public function set($key, $value)
+    public function add($key, $value, $hash = 'main')
     {
-        $data = $this->getAll($this->hash);
+        $data = $this->getAll($hash);
         $data[$key] = $value;
-        return $this->storage->set($this->hash, $data, 0, $this->expire);
+        return $this->get($key) ? false : $this->storage->set($hash, $data, 0, $this->expire);
+    } 
+    public function set($key, $value, $hash = 'main')
+    {
+        $data = $this->getAll($hash);
+        $data[$key] = $value;
+        return $this->storage->set($hash, $data, 0, $this->expire);
     }    
-    public function get($key)
+    public function get($key, $hash = 'main')
     {
-        return $this->storage->get($this->hash)[$key];
+        return $this->storage->get($hash)[$key];
     }
-    public function getAll()
+    public function getAll($hash = 'main')
     {
-        return $this->storage->get($this->hash);
+        return $this->storage->get($hash);
     }
-    public function delete($key)
+    public function delete($key, $hash = 'main')
     {
-        $data = $this->getAll($this->hash);
+        $data = $this->getAll($hash);
         unset($data[$key]);
-        return $this->storage->set($this->hash, $data);
+        return $this->storage->set($hash, $data);
     }
-    public function deleteAll()
+    public function deleteAll($hash = 'main')
     {
-        return $this->storage->delete($this->hash);
+        return $this->storage->delete($hash);
     }
 }

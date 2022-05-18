@@ -2,38 +2,48 @@
 
 namespace App\Storage;
 
-class Redis{
-    protected $expire;
-    protected $storage;
-    protected $hash = 'main';
-    public function __construct($expire, $hash)
+use App\Exception\StorageException;
+
+class Redis extends Storage{
+    public function __construct($expire)
     {
-        if($hash)
-            $this->hash = $hash;
         $this->expire = $expire;
         $this->storage = new \Redis();
-        $this->storage->connect('127.0.0.1', 6379);
+        if(!$this->storage->connect('127.0.0.1', 6379))
+            throw new StorageException("Storage connect error", 500);
     }
-    public function set($key, $value)
-    {
-        $result = $this->storage->hSet($this->hash, $key, $value);
-        $this->storage->expire($this->hash, $this->expire);
-        return (bool)$result;
+    public function add($key, $value, $hash = 'main'){
+        if(!$key || !$value)
+            throw new StorageException('add:missed parameters', 500);
+        $result = $this->storage->hSetNx($hash, $key, $value);
+        $this->storage->expire($hash, $this->expire);
+        return $result;
+    } 
+    public function set($key, $value, $hash = 'main'){
+        if(!$key || !$value)
+            throw new StorageException('set:missed parameters', 500);
+        $result = $this->storage->hSet($hash, $key, $value);
+        $this->storage->expire($hash, $this->expire);
+        return $result;
     }    
-    public function get($key)
+    public function get($key, $hash = 'main')
     {
-        return $this->storage->hGet($this->hash, $key);
+        if(!$key)
+            throw new StorageException('get:missed parameters', 500);
+        return $this->storage->hGet($hash, $key);
     }
-    public function getAll()
+    public function getAll($hash = 'main')
     {
-        return $this->storage->hGetAll($this->hash);
+        return $this->storage->hGetAll($hash);
     }
-    public function delete($key)
+    public function delete($key, $hash = 'main')
     {
-        return $this->storage->hDel($this->hash, $key);
+        if(!$key)
+            throw new StorageException('delete:missed parameters', 500);
+        return $this->storage->hDel($hash, $key);
     }
-    public function deleteAll()
+    public function deleteAll($hash = 'main')
     {
-        return $this->storage->del($this->hash);
+        return $this->storage->del($hash);
     }
 }
