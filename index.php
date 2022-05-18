@@ -1,12 +1,12 @@
 <?php
 require_once('./vendor/autoload.php');
 
-use App\Http\Request;
-use App\Router;
+use App\App;
 
-require_once('./src/routes.php');
-$request = new Request;
-$router = new Router($routes);
-$router->handleRequest($request);
+define('STORAGE', 'redis');
+define('EXPIRE', 3600);
+
+$app = new App();
+$app->start();
 
 ?>

@@ -1,0 +1,9 @@
+li{
+    list-style-type: none;
+}
+a.remove{
+    cursor: pointer;
+}
+a:hover{
+    text-decoration: none !important;
+}
