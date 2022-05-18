@@ -19,9 +19,9 @@ class MainController extends Controller{
     public function post(Request $request, Response $response){
         $result = $this->storage->add($request->params['key'], $request->params['value']);
         if($result !== false) 
-            $response->send(200, new stdClass);
+            $response->send(200, [$request->params['key'] => $request->params['value']]);
         else 
-            throw new Exception('Add key error');
+            throw new Exception('Key exist');
     }
     public function delete(Request $request, Response $response){
         $key = $request->params['key'];
