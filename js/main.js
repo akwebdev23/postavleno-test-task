@@ -39,16 +39,19 @@ function setDeleteHandlers(){
 }
 function renderItems (items, root, clear = true){
     let renderRoot = document.querySelector(root);
-    console.dir(renderRoot);
-    if(clear)
-        renderRoot.innerHTML = '';
-    for(let itemKey in items){
-        let li = document.createElement('li');
-        li.innerHTML = `${itemKey}: ${items[itemKey]} <a class="remove">delete</a>`;
-        renderRoot.append(li);
-        console.dir(itemKey);
-        console.dir(items[itemKey]);
-    }
-    setDeleteHandlers();
+    if(items){
+        console.dir(renderRoot);
+        if(clear)
+            renderRoot.innerHTML = '';
+        for(let itemKey in items){
+            let li = document.createElement('li');
+            li.innerHTML = `${itemKey}: ${items[itemKey]} <a class="remove">delete</a>`;
+            renderRoot.append(li);
+            console.dir(itemKey);
+            console.dir(items[itemKey]);
+        }
+        setDeleteHandlers();
+    } else
+        renderRoot.innerText = 'Здесь скоро что то повится...'
 }
 getAndRender(GET_ACTION);
