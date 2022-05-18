@@ -2,29 +2,39 @@
 
 namespace App\Http;
 
+use stdClass;
+
 class Response {
-    protected $responseBody;
+    public $responseBody;
     protected $statusCode;
     protected $headers;
 
-    public function __construct($body, $code, $type = 'text'){
-        $this->responseBody = $body;
+    public function __construct($code = 200, $data = '', $type = 'json'){
+        $this->responseBody = [
+            'status' => $code > 399 ? false : true,
+            'code' => $code > 399 ? 500 : 200,
+            'data' => $data
+        ];
         $this->statusCode = $code;
         $this->contentType = $type;
         if($type == 'text')
             $this->headers['Content-Type'] = 'text/html';
         else if($type == 'json'){
             $this->headers['Content-Type'] = 'application/json';
-            $this->responseBody = json_encode($body);
         }
     }
-    public function send()
-    {
-        foreach ($this->headers as $key => $value) {
+    public function send($code = null, $data = null, $type = null, $headers = null){
+        foreach ($headers ? $headers : $this->headers as $key => $value) {
             header($key.':'.$value);
         }
-        http_response_code($this->statusCode);
-        echo $this->responseBody;
+        $code = $code ? $code : $this->statusCode;
+        http_response_code($code);
+        $this->responseBody = [
+            'status' => $code > 399 ? false : true,
+            'code' => $code > 399 ? 500 : 200
+        ];
+        $data ? $this->responseBody['data'] = $data : $this->responseBody;
+        echo json_encode($this->responseBody);
     }
     public function setHeader($name, $value){
         $this->headers[$name] = $value;
