@@ -1,4 +1,5 @@
 <?php
+// без composer
 // require_once('./class_auto_load.php');
 require_once('./vendor/autoload.php');
 
