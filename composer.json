@@ -7,14 +7,10 @@
         }
     },
     "require": {
-        "php": "^7.4",
-        "ext-redis": "^5.1",
-        "ext-memcache": "*"
+        "php": "^7.4"
     },
     "require-dev": {
-        "php": "^7.4",
-        "ext-redis": "^5.1",
-        "ext-memcache": "*"
+        "php": "^7.4"
     },
 
     "authors": [

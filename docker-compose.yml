@@ -1,0 +1,52 @@
+version: '3'
+services:
+    app-nginx:
+        image: library/nginx:1-alpine
+        volumes:
+            - ./docker/development/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./:/app
+        depends_on:
+            - app-php-fpm
+        working_dir: /app
+        ports:
+            - "10101:80"
+        restart: always
+    app-php-fpm:
+        build:
+            context: ./docker/development
+            dockerfile: php-fpm.docker
+        volumes:
+            - ./:/app
+            - ./docker/development/php/:/usr/local/etc/php/conf.d
+        depends_on:
+            - app-redis
+        restart: always
+        dns:
+            - 8.8.8.8
+            - 4.4.4.4
+            - 0.0.0.0
+    app-php-cli:
+        build:
+            context: ./docker/development
+            dockerfile: php-cli.docker
+        volumes:
+            - ./:/app
+            - composer:/root/.composer/cache
+            - ./docker/development/php/:/usr/local/etc/php/conf.d
+        depends_on:
+            - app-redis
+        dns:
+            - 8.8.8.8
+            - 4.4.4.4
+            - 0.0.0.0
+    app-redis:
+        image: redis
+        volumes:
+            - ./logs:/log
+            - ./conf:/conf
+        restart: always
+        ports:
+            - "6378:6379"
+volumes:
+    app-redis:
+    composer:

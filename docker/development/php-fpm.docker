@@ -1,0 +1,12 @@
+FROM php:7.4-fpm
+
+RUN apt-get update
+
+RUN pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis
+
+ADD ./php/redis.ini /usr/local/etc/php/conf.d/20-redis.ini
+
+
+WORKDIR /app
