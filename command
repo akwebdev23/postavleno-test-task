@@ -5,6 +5,8 @@ require_once('./vendor/autoload.php');
 use App\Storage\Storage;
 
 define('EXPIRE', 3600);
+define('STORAGE_HOST', '127.0.0.1');
+define('STORAGE_PORT', 6379);
 
 unset($argv[0]);
 array_values($argv);
