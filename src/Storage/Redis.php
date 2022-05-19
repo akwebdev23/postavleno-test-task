@@ -9,7 +9,7 @@ class Redis extends Storage{
     {
         $this->expire = $expire;
         $this->storage = new \Redis();
-        if(!$this->storage->connect('127.0.0.1', 6379))
+        if(!$this->storage->connect(STORAGE_HOST, STORAGE_PORT))
             throw new StorageException("Storage connect error", 500);
     }
     public function add($key, $value, $hash = 'main'){

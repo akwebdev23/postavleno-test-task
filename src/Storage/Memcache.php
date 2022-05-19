@@ -8,7 +8,7 @@ class Memcache extends Storage{
     {
         $this->expire = $expire;
         $this->storage = new \Memcache();
-        if(!$this->storage->connect('localhost', 11211))
+        if(!$this->storage->connect(STORAGE_HOST, STORAGE_PORT))
             throw new StorageException("Storage connect error", 500);
     }
     public function add($key, $value, $hash = 'main')
